@@ -19,7 +19,8 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'role' => User::find($this->id)->getRoleNames()[0]
+            'role' => User::find($this->id)->getRoleNames()[0],
+            'permissions' => User::find($this->id)->getPermissionsViaRoles()->pluck('name')
         ];
     }
 }

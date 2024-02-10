@@ -17,7 +17,8 @@ class AssignPermissionsToRoles extends Seeder
     public function run(): void
     {
         $adminPermissions = Permission::all()->pluck('id');
-        $userPermissions = [3, 4, 5];
+        $writerPermissions = [3, 4, 5];
+        $vendorPermissions = [6, 7];
 
 
         $adminRolesIds = [
@@ -28,7 +29,7 @@ class AssignPermissionsToRoles extends Seeder
         ];
 
         $this->setPermissions($adminRolesIds, $adminPermissions);
-        $this->setPermissions($userRolesIds, $userPermissions);
+        $this->setPermissions($userRolesIds, $vendorPermissions);
     }
 
     private function setPermissions(Array $roles, Collection | Array $permissions): void{

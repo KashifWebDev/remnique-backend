@@ -18,14 +18,14 @@ class PermissionSeeder extends Seeder
         DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         $permissions = [
-            //For Admin
             ['id' => 1, 'name' => 'create-users'],
             ['id' => 2, 'name' => 'delete-users'],
             ['id' => 3, 'name' => 'create-post'],
-
-            // For User/Writer
             ['id' => 4, 'name' => 'edit-post'],
             ['id' => 5, 'name' => 'delete-post'],
+            ['id' => 6, 'name' => 'create-product'],
+            ['id' => 7, 'name' => 'delete-product'],
+            ['id' => 8, 'name' => 'edit-user'],
         ];
 
         foreach ($permissions as $permission){

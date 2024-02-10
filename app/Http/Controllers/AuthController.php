@@ -16,7 +16,11 @@ class AuthController extends Controller
             return $this->errorResponse('You have entered an invalid username or password', [], 401);
         }
 
-        $user = User::whereEmail($request->input('email'))->first();
+        $user = User::with(['roles' => function($query){
+            $query->select('id', 'name');
+        }])->whereEmail($request->input('email'))->first();
+
+//        $user = User::whereEmail($request->input('email'))->first();
         $userToken = $user->createToken('loginToken')->plainTextToken;
 
         return $this->successResponse(
