@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Blog;
 use App\Models\BlogCategory;
 use App\Models\BlogComment;
+use App\Models\Menu;
 use App\Models\Product;
 use App\Models\Review;
 use App\Models\User;
@@ -22,11 +23,11 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             PermissionSeeder::class,
             AssignPermissionsToRoles::class,
-            UserSeeder::class
+            UserSeeder::class,
+            MenusTableSeeder::class
         ]);
 
         Product::factory()->count(50)->hasReviews(rand(5, 10))->create();
-
         BlogCategory::factory()->count(10)->create();
         Blog::factory()->count(10)->hasComments(rand(2,5))->create();
     }
