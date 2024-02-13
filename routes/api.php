@@ -38,5 +38,7 @@ Route::group(['prefix' => 'menus', 'middleware' => 'auth:sanctum'], function (){
     Route::get('/parent', [MenuController::class, 'parent']);
     Route::get('/complete', [MenuController::class, 'completeSingleMenu']);
     Route::get('/{menu}', [MenuController::class, 'getById']);
+    Route::post('/store', [MenuController::class, 'store']);
+    Route::put('/update/{menu}', [MenuController::class, 'update']);
 });
 

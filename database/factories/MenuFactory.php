@@ -27,7 +27,9 @@ class MenuFactory extends Factory
             'menu_type' => 'megamenu',
             'image' => 'assets/images/megamenu/megamenu-' . $this->faker->numberBetween(1, 3) . '.jpg',
             'size' => $this->faker->randomElement(['xl', 'lg', 'nl', 'sm']),
-            // Add more fields as needed
+            'visibility' => rand(0, 5) > 3,
+            'page_title' => $this->faker->words(rand(2, 5), true),
+            'meta_desc' => $this->faker->sentence()
         ];
     }
 }

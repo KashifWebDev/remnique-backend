@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('label');
             $table->string('url');
-            $table->string('menu_type');
+            $table->string('menu_type')->nullable();
             $table->string('image')->nullable();
             $table->string('size')->nullable();
+            $table->boolean('visibility')->default(true);
+            $table->string('page_title')->nullable();
+            $table->text('meta_desc')->nullable();
             $table->foreignId('parent_id')->nullable()->constrained('menus');
             $table->timestamps();
         });

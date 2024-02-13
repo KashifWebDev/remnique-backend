@@ -19,7 +19,9 @@ class MenusTableSeeder extends Seeder
             'url' => '/shop/catalog',
             'menu_type' => 'megamenu',
             'size' => 'xl',
-            // Add more fields as needed
+            'visibility' => rand(0, 5) > 3,
+            'page_title' => 'Page Title here..',
+            'meta_desc' => 'SOme random meta desc here'
         ]);
         // Add submenus for Power Tools
         $powerTools->children()->createMany([
