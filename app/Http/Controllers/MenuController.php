@@ -16,14 +16,23 @@ class MenuController extends Controller
 
     public function index()
     {
-        $menus = Menu::published()->with('children')->withCount('children')->whereNull('parent_id')->get();
+        $menus = Menu::with('children')->withCount('children')->whereNull('parent_id')->get();
         return $this->successResponse(
             'List of menu',
             MenuResource::collection($menus)
         );
     }
+
+    public function activeChildMenus()
+    {
+        $menus = Menu::published()->whereNotNull('parent_id')->get();
+        return $this->successResponse(
+            'List of child menus',
+            MenuResource::collection($menus)
+        );
+    }
     public function completeSingleMenu(){
-        $menus = Menu::published(true)->leftJoin('menus as children', 'menus.id', '=', 'children.parent_id')
+        $menus = Menu::leftJoin('menus as children', 'menus.id', '=', 'children.parent_id')
             ->select('menus.*', \DB::raw('COUNT(children.id) as children_count'))
             ->groupBy('menus.id')
             ->get();
@@ -35,7 +44,7 @@ class MenuController extends Controller
     }
 
     public function parent(){
-        $parentMenu = Menu::published()->withCount('children')->whereNull('parent_id')->get();
+        $parentMenu = Menu::withCount('children')->whereNull('parent_id')->get();
 
         $customObject = [
             'id' => 0,
@@ -125,5 +134,26 @@ class MenuController extends Controller
             'Menu was updated',
             new MenuResource($menu)
         );
+    }
+
+    public function upload(Request $request)
+    {
+        // Validate the incoming request
+        $request->validate([
+            'file' => 'required|file|max:10240', // Example: max file size of 10MB
+        ]);
+
+        // Handle the file upload
+        if ($request->file('file')->isValid()) {
+            $fileName = time().'.'.$request->file->extension();
+            $request->file->move(public_path('uploads'), $fileName); // Move the file to the uploads directory
+
+            // You can also store the file in cloud storage like AWS S3
+            // Storage::disk('s3')->put('folder_name/'.$fileName, file_get_contents($request->file('file')));
+
+            return redirect()->back()->with('success', 'File uploaded successfully.');
+        } else {
+            return redirect()->back()->with('error', 'Invalid file.');
+        }
     }
 }

@@ -13,17 +13,20 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('menu_id')->nullable()->references('id')->on('menus')->onDelete('set null');
             $table->string('title');
+            $table->string('slug');
             $table->text('short_description')->nullable();
-            $table->enum('availability', ['In Stock', 'Out Of Stock'])->default('In Stock');
+            $table->integer('stock')->default(0);
             $table->string('brand')->nullable();
-            $table->string('sku')->unique();
-            $table->decimal('price', 10, 2);
+            $table->string('sku')->nullable();
+            $table->decimal('regular_price', 10, 2)->nullable();
+            $table->decimal('sale_price', 10, 2)->nullable();
             $table->string('color')->nullable();
             $table->string('material')->nullable();
-            $table->json('pictures')->nullable(); // Store multiple pictures as JSON
-            $table->json('tags')->nullable(); // Store tags as JSON
+            $table->text('pictures')->nullable(); // Store multiple pictures as JSON
+            $table->longText('tags')->nullable(); // Store tags as JSON
             $table->text('long_description')->nullable();
             $table->json('specification')->nullable(); // Dynamic key-value pairs for specifications
             $table->enum('status', ['Active', 'Inactive'])->default('Active');

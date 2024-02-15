@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogCategoryController;
 use App\Http\Controllers\BlogCommentController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserDashboardController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,11 @@ Route::group(['prefix' => 'dashboard', 'middleware' => 'auth:sanctum'], function
 
 });
 
+//Products
+Route::group(['middleware' => 'auth:sanctum'], function (){
+    Route::apiResource('products', ProductController::class);
+});
+
 //Menus
 Route::group(['prefix' => 'menus', 'middleware' => 'auth:sanctum'], function (){
     Route::get('/all', [MenuController::class, 'index']);
@@ -40,5 +46,5 @@ Route::group(['prefix' => 'menus', 'middleware' => 'auth:sanctum'], function (){
     Route::get('/{menu}', [MenuController::class, 'getById']);
     Route::post('/store', [MenuController::class, 'store']);
     Route::put('/update/{menu}', [MenuController::class, 'update']);
+    Route::get('/activeMenu/child', [MenuController::class, 'activeChildMenus']);
 });
-

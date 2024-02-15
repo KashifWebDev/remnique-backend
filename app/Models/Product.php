@@ -14,12 +14,15 @@ class Product extends Model
 
     protected $fillable = [
         'user_id',
+        'menu_id',
         'title',
+        'slug',
         'short_description',
-        'availability',
+        'stock',
         'brand',
         'sku',
-        'price',
+        'regular_price',
+        'sale_price',
         'color',
         'material',
         'pictures',
@@ -31,11 +34,6 @@ class Product extends Model
         'insta_link',
     ];
 
-    protected $casts = [
-        'pictures' => 'array',
-        'tags' => 'array',
-        'specification' => 'array',
-    ];
 
     public function user(): BelongsTo{
         return $this->belongsTo(User::class);
@@ -43,5 +41,9 @@ class Product extends Model
 
     public function reviews(): HasMany{
         return $this->hasMany(Review::class);
+    }
+
+    public function menu(): BelongsTo{
+        return $this->belongsTo(Menu::class);
     }
 }

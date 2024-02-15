@@ -2,9 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\Menu;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
@@ -23,31 +25,24 @@ class ProductFactory extends Factory
     {
         return [
             'user_id' => User::all()->random()->id,
+            'menu_id' => Menu::all()->random()->id,
             'title' => $this->faker->sentence,
+            'slug' => Str::slug($this->faker->sentence, '-'),
             'short_description' => $this->faker->paragraph,
-            'availability' => $this->faker->randomElement(['In Stock', 'Out Of Stock']),
-            'brand' => $this->faker->word,
+            'stock' => $this->faker->numberBetween(0, 100),
+            'brand' => $this->faker->company,
             'sku' => $this->faker->unique()->ean13,
-            'price' => $this->faker->randomFloat(2, 10, 1000),
+            'regular_price' => $this->faker->randomFloat(2, 10, 1000),
+            'sale_price' => rand(1,100) > 50 ? $this->faker->randomFloat(2, 5, 800) : null,
             'color' => $this->faker->colorName,
             'material' => $this->faker->word,
-            'pictures' => json_encode([$this->faker->imageUrl(), $this->faker->imageUrl()]),
-            'tags' => json_encode([$this->faker->word, $this->faker->word]),
+            'pictures' => json_encode([$this->faker->imageUrl(), $this->faker->imageUrl(), $this->faker->imageUrl()]),
+            'tags' => json_encode([$this->faker->word, $this->faker->word, $this->faker->word]),
             'long_description' => $this->faker->paragraphs(3, true),
-            'specification' => json_encode([
-                'General' => [
-                    'Key1' => $this->faker->word,
-                    'Key2' => $this->faker->word,
-                ],
-                'Dimensions' => [
-                    'Length' => $this->faker->randomFloat(2, 1, 10),
-                    'Width' => $this->faker->randomFloat(2, 1, 10),
-                    'Height' => $this->faker->randomFloat(2, 1, 10),
-                ],
-            ]),
+            'specification' => json_encode(['key1' => $this->faker->word, 'key2' => $this->faker->word]),
             'status' => $this->faker->randomElement(['Active', 'Inactive']),
-            'amazon_link' => rand(0,10) > 5 ? $this->faker->url() : '',
-            'insta_link' => rand(0,10) > 5 ? $this->faker->url() : '',
+            'amazon_link' => $this->faker->url,
+            'insta_link' => $this->faker->url,
         ];
     }
 }
