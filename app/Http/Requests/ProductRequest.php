@@ -22,23 +22,29 @@ class ProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'menu_id' => 'nullable|exists:menus,id',
-            'title' => 'required|string',
-            'short_description' => 'nullable|string',
-            'stock' => 'required|integer',
+            'menuId' => 'required',
+            'title' => 'required',
+            'slug' => 'required',
+            'short_description' => 'nullable',
+            'stock' => 'numeric',
+            'tags' => 'nullable|string',
             'brand' => 'nullable|string',
-            'sku' => 'nullable',
+            'sku' => 'nullable|string',
             'regular_price' => 'nullable|numeric',
             'sale_price' => 'nullable|numeric',
-            'color' => 'nullable|string',
-            'material' => 'nullable|string',
-            'pictures' => 'nullable|array',
-            'tags' => 'nullable',
+            'material' => 'nullable|array',
             'long_description' => 'nullable|string',
-            'specification' => 'nullable|array',
-            'status' => 'required',
-            'amazon_link' => 'nullable|string',
-            'insta_link' => 'nullable|string',
+            'status' => 'nullable|string|in:Active,Inactive',
+            'amazon_link' => 'nullable|url',
+            'insta_link' => 'nullable|url',
+            'cover_img' => 'nullable|image|mimes:jpeg,png,jpg,gif,jfif|max:15360', // Adjust validation rule for cover_img
+            'coverImages' => 'nullable|array',
+            'coverImages.*' => 'required|image|mimes:jpeg,png,jpg,gif,jfif|max:15360', // Adjust validation rule for coverImages
+            'specifications' => 'nullable|array',
+            'specifications.*.key' => 'required|string',
+            'specifications.*.value' => 'required|string',
+            'colors' => 'nullable|array',
+            'colors.*' => 'string', // Assuming colors are strings, adjust if necessary
         ];
     }
 }

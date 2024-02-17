@@ -30,7 +30,6 @@ class ProductController extends Controller
      */
     public function store(ProductRequest $request, FileUploadService $fileUploadService)
     {
-
         $product = new Product();
         $product->user_id = Auth::id();
 
@@ -44,14 +43,22 @@ class ProductController extends Controller
         $product->sku = $request->input('sku');
         $product->regular_price = $request->input('regular_price');
         $product->sale_price = $request->input('sale_price');
-        $product->color = $request->input('color');
-        $product->material = $request->input('material');
         $product->long_description = $request->input('long_description');
         $product->status = $request->input('status');
         $product->amazon_link = $request->input('amazon_link');
         $product->insta_link = $request->input('insta_link');
 
-        // Upload and assign cover images
+        // Handle cover image
+        if ($request->hasFile('cover_img')) {
+            $coverImage = $request->file('cover_img');
+            $coverImagePath = $fileUploadService->upload(
+                $coverImage,
+                $coverImage->getClientOriginalName(), // Use the original file name for uniqueness
+                '/images/products' // Upload path for cover image
+            );
+            $product->cover_img = $coverImagePath;
+        }
+
         // Upload and assign cover images
         if ($request->hasFile('coverImages')) {
             $coverImagesPaths = [];
@@ -59,42 +66,32 @@ class ProductController extends Controller
                 $coverImagePath = $fileUploadService->upload(
                     $coverImage,
                     $coverImage->getClientOriginalName(), // Use the original file name for uniqueness
-                    '/images/products/cover' // Upload path for cover images
+                    '/images/products' // Upload path for cover images
                 );
                 $coverImagesPaths[] = $coverImagePath;
-//                $image = new ProductImage(['path' => $coverImagePath]);
-//                $product->images()->save($image); // Associate the image with the product
             }
             $product->pictures = json_encode($coverImagesPaths);
-//            $product->pictures = array('url1', 'url2');
         }
 
-
-
+        // Handle tags
         $product->tags = json_encode($request->input('tags'));
 
-        // Assign specifications (assuming specifications are provided as an array of key-value pairs)
-// Receive specifications from the request
+        // Handle specifications
         $specifications = $request->input('specification');
+        $product->specification = !empty($specifications) ? json_encode($specifications) : null;
 
-// Initialize an empty array to store specifications
-        $parsedSpecifications = [];
+        // Handle materials
+        $materials = $request->input('materials');
+        $product->materials = !empty($materials) ? json_encode($materials) : null;
 
-// Iterate over the received parameters
-        foreach ($specifications as $key => $value) {
-            // Add each specification to the parsedSpecifications array
-            $parsedSpecifications[$key] = $value;
-        }
-
-// Convert specifications to JSON format before storing
-        $product->specification = json_encode($parsedSpecifications);
-
+        // Handle colors
+        $colors = $request->input('colors');
+        $product->colors = !empty($colors) ? json_encode($colors) : null;
 
 //        return $product;
+
         // Save the product
         $product->save();
-
-//        return $product;
 
         // Return success response with the created product
         return $this->successResponse(
@@ -102,6 +99,7 @@ class ProductController extends Controller
             new ProductResource($product)
         );
     }
+
 
     /**
      * Display the specified resource.

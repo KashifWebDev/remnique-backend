@@ -23,8 +23,9 @@ return new class extends Migration
             $table->string('sku')->nullable();
             $table->decimal('regular_price', 10, 2)->nullable();
             $table->decimal('sale_price', 10, 2)->nullable();
-            $table->string('color')->nullable();
-            $table->string('material')->nullable();
+            $table->text('colors')->nullable();
+            $table->text('materials')->nullable();
+            $table->string('cover_img')->nullable(); // Store multiple pictures as JSON
             $table->text('pictures')->nullable(); // Store multiple pictures as JSON
             $table->longText('tags')->nullable(); // Store tags as JSON
             $table->text('long_description')->nullable();
