@@ -19,7 +19,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::paginate(10); // You can adjust the pagination as needed
+        $products = Product::all(); // You can adjust the pagination as needed
         return $this->successResponse('List of products',
             ProductResource::collection($products)
         );

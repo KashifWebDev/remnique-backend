@@ -20,9 +20,15 @@ class ProductResource extends JsonResource
         $pictures = json_decode($this->pictures);
 
         // Prepend the base URL to each picture URL
-        $picturesWithBaseURL = array_map(function($picture) use ($baseURL) {
-            return $baseURL .'/'. $picture;
-        }, $pictures);
+        $picturesWithBaseURL = null;
+
+        // Check if $pictures is not null and is an array
+        if (!is_null($pictures) && is_array($pictures)) {
+            // Prepend the base URL to each picture URL
+            $picturesWithBaseURL = array_map(function($picture) use ($baseURL) {
+                return $baseURL .'/'. $picture;
+            }, $pictures);
+        }
 
 
         return [
@@ -37,6 +43,7 @@ class ProductResource extends JsonResource
             'sale_price' => $this->sale_price,
             'colors' => $this->colors,
             'materials' => $this->materials,
+            'cover_img' => $baseURL.'/'.$this->cover_img,
             'pictures' => $picturesWithBaseURL,
             'tags' => $this->tags,
             'long_description' => $this->long_description,
