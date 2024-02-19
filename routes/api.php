@@ -55,12 +55,3 @@ Route::middleware(['cors-mw'])->group(function () {
 
 
 });
-
-Route::get('/backend/images/{path}', function ($path) {
-    $filePath = storage_path('app/public/images/' . $path);
-    if (file_exists($filePath)) {
-        return response()->file($filePath);
-    } else {
-        return response()->json(['error' => 'File not found.'], 404);
-    }
-})->where('path', '.*');

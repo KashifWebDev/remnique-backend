@@ -16,12 +16,11 @@ class FileUploadService{
             $randomNumber = mt_rand(100, 999);
             $extension = $file->getClientOriginalExtension();
             $filename = 'remnique.com_' . Str::slug($textAfter) . '_' . $randomNumber . '.' . $extension;
-            $path = $file->store($directory, $filename);
+            $path = $file->storeAs($directory, $filename);
 
             Log::channel('single')->info('hah');
             return $path;
         } catch (Exception $e) {
-            return $e;
             Log::channel('single')->info($e);
             return $e;
         }
