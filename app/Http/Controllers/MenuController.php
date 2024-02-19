@@ -88,12 +88,16 @@ class MenuController extends Controller
         $menu->page_title = $request->input('page_title');
         $menu->meta_desc = $request->input('meta_desc');
 
+
+
+
         if($request->hasFile('image')){
             $imagePath = $fileUploadService->upload(
                 $request->file('image'),
                 $request->input('label'),
                 '/images/menus'
             );
+return $imagePath;
             $menu->image = $imagePath;
         }
 
