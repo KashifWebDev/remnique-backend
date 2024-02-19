@@ -97,7 +97,6 @@ class MenuController extends Controller
                 $request->input('label'),
                 '/images/menus'
             );
-return $imagePath;
             $menu->image = $imagePath;
         }
 
