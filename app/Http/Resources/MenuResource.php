@@ -20,7 +20,7 @@ class MenuResource extends JsonResource
             "url" =>  $this->url,
             "menu_type" =>  $this->when(!$this->parent_id, $this->menu_type),
             "visibility" =>  $this->when($request->user()->hasRole('Super Admin'), $this->visibility),
-            "image" =>  $this->when(!$this->parent_id, env('APP_URL').'/'.$this->image),
+            "image" =>  $this->when(!$this->parent_id, env('APP_URL').'/'.str_replace('/home/u953547654/domains/remnique.com/public_html/__secure', '', $this->image)),
             "size" =>  $this->when(!$this->parent_id, $this->size),
             "parent_id" =>  $this->when($this->parent_id, $this->parent_id),
             "page_title" =>  $this->when(!$this->parent_id, $this->page_title),
@@ -28,5 +28,6 @@ class MenuResource extends JsonResource
             "children_count" =>  $this->whenCounted('children'),
             "children" => MenuResource::collection($this->whenLoaded('children'))
         ];
+
     }
 }

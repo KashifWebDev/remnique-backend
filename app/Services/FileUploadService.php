@@ -19,7 +19,7 @@ class FileUploadService{
             $filename = 'remnique.com_' . Str::slug($textAfter) . '_' . $randomNumber . '.' . $extension;
         $name = time() . "_" . $file->getClientOriginalName();
 
-            $path = $file->move($uploadPath, $name);
+            $path = $file->move($uploadPath, $filename);
 
             Log::channel('single')->info('hah');
             return $path;
