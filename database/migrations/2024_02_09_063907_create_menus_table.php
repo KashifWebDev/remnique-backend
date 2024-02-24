@@ -24,6 +24,26 @@ return new class extends Migration
             $table->foreignId('parent_id')->nullable()->constrained('menus');
             $table->timestamps();
         });
+
+        // New table for menu items
+//        Schema::create('menu_items', function (Blueprint $table) {
+//            $table->id();
+//            $table->string('label');
+//            $table->string('url');
+//            $table->foreignId('menu_id')->constrained('menus');
+//            $table->foreignId('parent_id')->nullable()->constrained('menu_items');
+//            $table->timestamps();
+//        });
+
+        Schema::create('menu_items', function (Blueprint $table) {
+            $table->id();
+            $table->string('label');
+            $table->string('url');
+            $table->foreignId('menu_id')->constrained('menus');
+            $table->foreignId('parent_id')->nullable()->constrained('menu_items');
+            $table->timestamps();
+        });
+
     }
 
     /**
