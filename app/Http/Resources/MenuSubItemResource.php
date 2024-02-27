@@ -15,12 +15,12 @@ class MenuSubItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
         $data = [
             'label' => $this->label,
             'url' => $this->url,
         ];
 
-        Log::info($this->items);
 
         if ($this->items !== null && count($this->items)) {
             $data['items'] = $this->items;

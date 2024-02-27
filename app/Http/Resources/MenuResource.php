@@ -15,22 +15,22 @@ class MenuResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $items = isset($this->items) && count($this->items) ? MenuSubItemResource::collection($this->items) : new MenuSubItemResource($this->items);
+//        $items = isset($this->items) && count($this->items) ? MenuSubItemResource::collection($this->items) : new MenuSubItemResource($this->items);
 
         return [
             'label' => $this->label,
             'url' => $this->url,
-            'menu' => [
+            'menu' => $this->when(isset($this->items) && count($this->items) , [
                 'type' => 'megamenu',
                 'size' => 'sm',
                 'columns' => [
                     array(
                         'size' => 12,
-//                        'items' => MenuSubItemResource::collection($this->items)
-                        'items' => $items
+                        'items' => MenuSubItemResource::collection($this->items)
+//                        'items' => $this->items
                     )
                 ],
-            ]
+            ])
         ];
     }
 }

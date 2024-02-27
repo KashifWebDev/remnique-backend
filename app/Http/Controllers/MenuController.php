@@ -77,6 +77,8 @@ class MenuController extends Controller
 //        $menu->page_title = $request->input('page_title');
 //        $menu->meta_desc = $request->input('meta_desc');
 
+//        return $request;
+
         $parentID = $request->input('parent_id');
 
         if($parentID == 0){
@@ -85,12 +87,14 @@ class MenuController extends Controller
 
         if($request->exists('child_id')){
             $childID = $request->input('child_id');
-            if($childID == 0){
-                $menu->parent_id = $parentID;
-                $menu = new MenuSub();
-            }else{
-                $menu = new MenuSubItem();
-                $menu->parent_id = $childID;
+            if(isset($childID)){
+                if($childID == 0){
+                    $menu = new MenuSub();
+                    $menu->parent_id = $parentID;
+                }elseif ($childID > 0){
+                    $menu = new MenuSubItem();
+                    $menu->parent_id = $childID;
+                }
             }
         }
 
@@ -109,11 +113,11 @@ class MenuController extends Controller
         }
 
         $menu->save();
-        return  $menu;
+//        return  $menu;
 
         return $this->successResponse(
             'Menu was created',
-            new MenuResource($menu)
+            $menu
         );
     }
 
