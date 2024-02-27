@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('menu_id')->nullable()->references('id')->on('menus')->onDelete('set null');
+            $table->integer('menu_id')->nullable();
+            $table->integer('menu_level')->nullable();
             $table->string('title');
             $table->string('slug');
             $table->text('short_description')->nullable();

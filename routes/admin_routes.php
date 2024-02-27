@@ -42,11 +42,9 @@ Route::group(['middleware' => 'auth:sanctum'], function (){
 //Menus
 Route::group(['prefix' => 'menus', 'middleware' => 'auth:sanctum'], function (){
     Route::get('/all', [MenuController::class, 'index']);
-    Route::get('/parent', [MenuController::class, 'parent']);
-    Route::get('/complete', [MenuController::class, 'completeSingleMenu']);
-    Route::get('/{menu}', [MenuController::class, 'getById']);
+    Route::get('/first-level', [MenuController::class, 'firstLevel']);
+    Route::get('/second-level/{id}', [MenuController::class, 'secondLevel']);
     Route::post('/store', [MenuController::class, 'store']);
     Route::put('/update/{menu}', [MenuController::class, 'update']);
-    Route::get('/activeMenu/child', [MenuController::class, 'activeChildMenus']);
 });
 ?>

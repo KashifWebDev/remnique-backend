@@ -20,8 +20,8 @@ class FileUploadService{
         $name = time() . "_" . $file->getClientOriginalName();
 
             $path = $file->move($uploadPath, $filename);
+            $path = str_replace(env('UPLOAD_PATH'), '', $path);
 
-            Log::channel('single')->info('hah');
             return $path;
         } catch (Exception $e) {
             Log::channel('single')->info($e);

@@ -4,8 +4,9 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
-class MenuItemResource extends JsonResource
+class MenuSubItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,10 +15,18 @@ class MenuItemResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'label' => $this->label,
             'url' => $this->url,
-            'children' => MenuItemResource::collection($this->children)
         ];
+
+        Log::info($this->items);
+
+        if ($this->items !== null && count($this->items)) {
+            $data['items'] = $this->items;
+        }
+
+        return $data;
     }
+
 }

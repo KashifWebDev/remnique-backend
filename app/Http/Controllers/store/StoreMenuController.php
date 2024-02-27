@@ -13,9 +13,9 @@ class StoreMenuController extends Controller
     use APIResponseTrait;
 
     public function index(){
-        $menus = Menu::with('items')->get();
+        $menus = Menu::all();
 
-//        return view('menu', ['menus' => $menus]);
+//        return MenuResource::collection($menus);
 
 //        $menus = Menu::published()->whereNull('parent_id')->with('children')->get();
         return $this->successResponse(

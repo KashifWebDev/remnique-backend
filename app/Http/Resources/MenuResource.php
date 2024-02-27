@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class MenuResource extends JsonResource
 {
@@ -14,22 +15,22 @@ class MenuResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $items = isset($this->items) && count($this->items) ? MenuSubItemResource::collection($this->items) : new MenuSubItemResource($this->items);
+
         return [
-            'id' => $this->id,
             'label' => $this->label,
             'url' => $this->url,
             'menu' => [
-                'type' => $this->menu_type,
-                'size' => $this->size,
-                'columns' => $this->when($this->menu_type === 'megamenu', [
-                    [
+                'type' => 'megamenu',
+                'size' => 'sm',
+                'columns' => [
+                    array(
                         'size' => 12,
-                        'items' => MenuItemResource::collection($this->items)
-                    ]
-                ]),
-                'items' => $this->when($this->menu_type !== 'megamenu', MenuItemResource::collection($this->items))
+//                        'items' => MenuSubItemResource::collection($this->items)
+                        'items' => $items
+                    )
+                ],
             ]
         ];
-
     }
 }

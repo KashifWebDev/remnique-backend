@@ -4,25 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Menu extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['label', 'url', 'menu_type', 'image', 'size', 'parent_id', 'visibility', 'page_title', 'meta_desc'];
+//    protected $fillable = ['label', 'url', 'menu_type', 'image', 'size', 'parent_id', 'visibility', 'page_title', 'meta_desc'];
+    protected $fillable = ['label', 'url'];
 
-
-    public function children()
-    {
-        return $this->hasMany(MenuItem::class, 'parent_id')->with('children');
-    }
-
-    public function parent()
-    {
-        return $this->belongsTo(Menu::class, 'parent_id');
-    }
 
     public function scopePublished($q, bool $customQuery = false)
     {
@@ -31,13 +22,12 @@ class Menu extends Model
             $q->whereVisibility(true);
     }
 
-    public function items(): HasMany
-    {
-        return $this->hasMany(MenuItem::class);
+    public function items(): HasMany{
+        return $this->hasMany(MenuSub::class, 'parent_id');
     }
-    public function menuItems(): HasMany
-    {
-        return $this->hasMany(MenuItem::class);
+
+    public function products(): HasManyThrough{
+        return $this->hasManyThrough(MenuSubItem::class, MenuSub::class, 'parent_id', 'parent_id');
     }
 
 }

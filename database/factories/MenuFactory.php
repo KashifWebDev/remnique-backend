@@ -61,12 +61,12 @@ class MenuFactory extends Factory
         return [
             'label' => $this->faker->words(2, true),
             'url' => '/shop/catalog',
-            'menu_type' => 'megamenu',
-            'image' => 'assets/images/megamenu/megamenu-' . $this->faker->numberBetween(1, 3) . '.jpg',
-            'size' => $this->faker->randomElement(['xl', 'lg', 'nl', 'sm']),
-            'visibility' => rand(0, 5) > 3,
-            'page_title' => $this->faker->words(rand(2, 5), true),
-            'meta_desc' => $this->faker->sentence()
+//            'menu_type' => 'megamenu',
+//            'image' => 'assets/images/megamenu/megamenu-' . $this->faker->numberBetween(1, 3) . '.jpg',
+//            'size' => $this->faker->randomElement(['xl', 'lg', 'nl', 'sm']),
+//            'visibility' => rand(0, 5) > 3,
+//            'page_title' => $this->faker->words(rand(2, 5), true),
+//            'meta_desc' => $this->faker->sentence()
         ];
     }
 }

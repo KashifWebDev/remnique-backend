@@ -10,6 +10,7 @@ use App\Services\FileUploadService;
 use App\Traits\APIResponseTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
@@ -35,6 +36,7 @@ class ProductController extends Controller
 
         // Assign values from the request to the product object
         $product->menu_id = $request->input('menuId');
+        $product->menu_level = $request->input('menuLevel');
         $product->title = $request->input('title');
         $product->slug = $request->input('slug');
         $product->short_description = $request->input('short_description');
@@ -70,6 +72,9 @@ class ProductController extends Controller
                 );
                 $coverImagesPaths[] = $coverImagePath;
             }
+//            Log::info(json_encode($coverImagesPaths));
+//            Log::info($coverImagesPaths);
+//            Log::info('test');
             $product->pictures = json_encode($coverImagesPaths);
         }
 
@@ -105,6 +110,12 @@ class ProductController extends Controller
      * Display the specified resource.
      */
     public function show(Product $product)
+    {
+        return $this->successResponse('Product details',
+            new ProductResource($product)
+        );
+    }
+    public function showSingle(Product $product)
     {
         return $this->successResponse('Product details',
             new ProductResource($product)

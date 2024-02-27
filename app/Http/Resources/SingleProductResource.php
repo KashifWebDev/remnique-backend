@@ -2,13 +2,11 @@
 
 namespace App\Http\Resources;
 
-use App\Traits\prependSiteLInkTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductResource extends JsonResource
+class SingleProductResource extends JsonResource
 {
-    use prependSiteLInkTrait;
     /**
      * Transform the resource into an array.
      *
