@@ -2,13 +2,12 @@
 
 namespace App\Http\Resources;
 
-use App\Traits\prependSiteLInkTrait;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class ProductResource extends JsonResource
 {
-    use prependSiteLInkTrait;
     /**
      * Transform the resource into an array.
      *
@@ -62,7 +61,11 @@ class ProductResource extends JsonResource
             // Transform each item in the array
             $transformedItems = [];
             foreach ($items as $item) {
-                $transformedItems[] = $this->prependSiteLink($item);
+                try {
+                    $transformedItems[] = env('APP_URL').'/'.$item;
+                }catch (\Exception $exception){
+                    Log::error($exception);
+                }
             }
             $data['pictures'] = $transformedItems;
         }

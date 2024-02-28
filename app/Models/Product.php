@@ -34,6 +34,7 @@ class Product extends Model
         'status',
         'amazon_link',
         'insta_link',
+        'dynamicHeading',
     ];
 
 
@@ -46,6 +47,14 @@ class Product extends Model
     }
 
     public function menu(): BelongsTo{
-        return $this->belongsTo(Menu::class);
+        $this->menu_id;
+        if($this->menu_level ==1 ) return $this->belongsTo(Menu::class);
+        if($this->menu_level ==2 ) return $this->belongsTo(MenuSub::class);
+        return $this->belongsTo(MenuSubItem::class);
+    }
+
+    public function averageRating(): float{
+        $average = $this->reviews()->avg('rating') ?? 0;
+        return round($average, 1);
     }
 }

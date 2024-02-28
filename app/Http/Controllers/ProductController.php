@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\SingleProductResource;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Services\FileUploadService;
@@ -49,6 +50,7 @@ class ProductController extends Controller
         $product->status = $request->input('status');
         $product->amazon_link = $request->input('amazon_link');
         $product->insta_link = $request->input('insta_link');
+        $product->dynamicHeading = $request->input('dynamicHeading');
 
         // Handle cover image
         if ($request->hasFile('cover_img')) {
@@ -72,14 +74,11 @@ class ProductController extends Controller
                 );
                 $coverImagesPaths[] = $coverImagePath;
             }
-//            Log::info(json_encode($coverImagesPaths));
-//            Log::info($coverImagesPaths);
-//            Log::info('test');
             $product->pictures = json_encode($coverImagesPaths);
         }
 
         // Handle tags
-        $product->tags = json_encode($request->input('tags'));
+        $product->tags = $request->input('tags');
 
         // Handle specifications
         $specifications = $request->input('specification');
@@ -117,8 +116,18 @@ class ProductController extends Controller
     }
     public function showSingle(Product $product)
     {
+        $product->loadCount('reviews');
         return $this->successResponse('Product details',
-            new ProductResource($product)
+            new SingleProductResource($product)
+        );
+    }
+    public function showBySlug($slug)
+    {
+        $product = Product::whereSlug($slug)->withCount('reviews')->latest()->first();
+        //return $product;
+//        $product->loadCount('reviews');
+        return $this->successResponse('Product details',
+            new SingleProductResource($product)
         );
     }
 

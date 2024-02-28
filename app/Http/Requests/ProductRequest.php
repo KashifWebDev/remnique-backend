@@ -24,7 +24,7 @@ class ProductRequest extends FormRequest
         return [
             'menuId' => 'required',
             'title' => 'required',
-            'slug' => 'required',
+            'slug' => 'required|unique:products,slug',
             'short_description' => 'nullable',
             'stock' => 'numeric',
             'tags' => 'nullable|string',

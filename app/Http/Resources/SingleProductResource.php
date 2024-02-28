@@ -14,56 +14,68 @@ class SingleProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $baseURL = env("APP_URL"); // Replace this with your base URL
+        $data = [
+            'id' => $this->id,
+            'slug' => $this->slug,
+            'name' => $this->title,
+            'sku' => $this->sku,
+            'price' => (integer)$this->regular_price,
+            'salePrice' => (integer)$this->sale_price,
+            'reviews' => $this->reviews_count,
+            'rating' => $this->averageRating(),
+            'availability' => $this->stock,
+            'colors' => json_decode($this->colors),
+            'dynamicHeading' => $this->dynamicHeading,
+            'materials' => json_decode($this->materials),
+            'tags' => explode(',', $this->tags),
+            'brand' => $this->brand,
+            'categories' => $this->parent,
+            'short_description' => $this->short_description,
+            'long_description' => $this->long_description,
+            'customFields' => $this->specification,
+            'amazon_link' => $this->amazon_link,
+            'insta_link' => $this->insta_link,
+            'created_at' => $this->created_at
+        ];
 
-        // Decode the 'pictures' JSON string into an array
-        $pictures = json_decode($this->pictures);
-
-        // Prepend the base URL to each picture URL
-        $picturesWithBaseURL = null;
-
-        // Check if $pictures is not null and is an array
-//        if (!is_null($pictures) && is_array($pictures)) {
-//            // Prepend the base URL to each picture URL
-//            $picturesWithBaseURL = array_map(function($picture) use ($baseURL) {
-//                return $baseURL .'/'. $picture;
-//            }, $pictures);
+        //Adding Menu Categories
+        $categories = [];
+//        array_push($categories, ['label' => 'Home', 'url' => '/']);
+//        if($this->menu_level1 <=1){
+//            array_push($categories, new CategoryResource($this->menu()));
+//        }
+//        if($this->menu_level1 <=2){
+//            array_push($categories, new CategoryResource($this->menu()));
+//        }
+//        if($this->menu_level1 <=1){
+//            array_push($categories, new CategoryResource($this->menu()));
 //        }
 
 
-        $data = [
-            'id' => $this->id,
-            'title' => $this->title,
-            'slug' => $this->slug,
-            'short_description' => $this->short_description,
-            'stock' => $this->stock,
-            'brand' => $this->brand,
-            'sku' => $this->sku,
-            'regular_price' => $this->regular_price,
-            'sale_price' => $this->sale_price,
-            'colors' => $this->colors,
-            'materials' => $this->materials,
-            'cover_img' => $baseURL.'/'.$this->cover_img,
-//            'pictures' => $pictures,
-            'tags' => $this->tags,
-            'long_description' => $this->long_description,
-            'specification' => $this->specification,
-            'amazon_link' => $this->amazon_link,
-            'insta_link' => $this->insta_link,
-            'created_at' => $this->created_at,
-            'status' => $this->status
-        ];
+        $data['menus'] = $categories;
 
+        // Transforming Pictures
+        $transformedItems = [];
+        $transformedItems[] = env('APP_URL').'/'.$this->cover_img;
         $items = is_string($this->pictures) ? json_decode($this->pictures, true) : $this->pictures;
-
         if (is_array($items) && count($items) > 0) {
             // Transform each item in the array
-            $transformedItems = [];
             foreach ($items as $item) {
-                $transformedItems[] = $this->prependSiteLink($item);
+                  $transformedItems[] = env('APP_URL').'/'.$item;
             }
-            $data['pictures'] = $transformedItems;
         }
+        $data['images'] = $transformedItems;
+
+        // Transoforming Attributes
+        $specifications = json_decode($this->specification, true);
+        $transformedSpecifications = [];
+        foreach ($specifications as $slug => $value) {
+            $transformedSpecifications[] = [
+                'key' => $slug,
+                'value' => $value,
+            ];
+        }
+        $data['specs'] = $transformedSpecifications;
 
         return $data;
     }
